@@ -1,0 +1,8 @@
+package main
+
+import "strings"
+
+func RenderLine(text string, banner map[rune][]string) []string {
+	result := make([]string, 8)
+	var rows strings.Builder
+}
