@@ -10,22 +10,21 @@ func GenerateArt(input string, banner map[rune][]string) string {
 	}
 	err := validate(input)
 	if err != nil {
-		return err.Error() // bad practice tho just for the purpose of recoding
+		return err.Error() // bad practice tho, we loose error type information with this, i used it just for recoding
 	}
 	lines := split(input)
-	var results strings.Builder
-
+	var result strings.Builder
 	for i, line := range lines {
 		if line == "" {
-			if i < len(lines)-1 {
-				results.WriteString("/n")
+			if i < len(lines)-1 { // add a new line if we are not on the last line
+				result.WriteString("\n")
+				continue
 			}
-			continue
 		}
-		rows := RenderLine(line, banner)
+		rows := RenderLine(line, banner) // rendering is done line by line
 		for _, row := range rows {
-			results.WriteString(row + "\n")
+			result.WriteString(row + "\n")
 		}
 	}
-	return results.String()
+
 }
