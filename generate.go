@@ -1,23 +1,31 @@
 package main
 
-import "strings"
+import (
+	"strings"
+)
 
 func GenerateArt(input string, banner map[rune][]string) string {
 	if input == "" {
 		return ""
 	}
-	var result string
-	var art strings.Builder
-	lines := split(input)
-	for i, line := range lines {
-		if line == " " { // this is for new line character as it was not considered in RenderLine function
-			art.WriteString("\n")
-			continue
-		}
-		rows := RenderLine(line, banner)
-		for _, row := range rows {
-			art.WriteString(row + "\n")
-		}
-		result[i]
+	err := validate(input)
+	if err != nil {
+		return err.Error() // bad practice tho, we loose error type information with this, i used it just for recoding
 	}
+	lines := split(input)
+	var result strings.Builder
+	for i, line := range lines { // i is just for boundary checks
+		if line == "" {
+			if i < len(lines)-1 { // add a new line if we are not on the last line
+				result.WriteString("\n")
+				continue
+			}
+		}
+		rows := RenderLine(line, banner) // rendering is done line by line
+		for _, row := range rows {
+			result.WriteString(row)
+			result.WriteString("\n")
+		}
+	}
+	return result.String()
 }
