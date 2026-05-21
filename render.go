@@ -7,13 +7,14 @@ import (
 func RenderLine(text string, banner map[rune][]string) []string {
 	result := make([]string, 8)
 	for i := 0; i < 8; i++ {
-		var rows strings.Builder // creates a new empty builder every iteration, so that rows dont overlap
-		for _, c := range text {
-			if val, ok := banner[c]; ok {
-				rows.WriteString(val[i])
+		var rows strings.Builder
+		for _, r := range text {
+			val, ok := banner[r]
+			if ok {
+				rows.WriteString(val[i]) // i is necessary in order to write values just perculiar to that row
 			}
 		}
-		result[i] = rows.String() // collects the characters row by row
+		result[i] = rows.String()
 	}
 	return result
 }
